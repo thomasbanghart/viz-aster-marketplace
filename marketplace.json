@@ -1,9 +1,9 @@
 {
-  "label": "Spider Visualization",
+  "label": "Aster Plot Visualization",
   "category_label": "Plug-ins",
   "branding": {
-    "image_uri": "https://static.thenounproject.com/png/195098-200.png",
-    "tagline": "Use the Spider visualization to compare multiple quanitative values on a polar plane."
+    "image_uri": "",
+    "tagline": ""
   },
     "constants": {
         "VIS_LABEL": {
