@@ -61,7 +61,8 @@ looker.plugins.visualizations.add({
     radius: {
       section: "Data",
       type: "number",
-      label: "Circle Radius"
+      label: "Circle Radius",
+      default: 0
     },
     // keyword_search: {
     //   section: "Data",
