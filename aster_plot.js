@@ -61,7 +61,8 @@ looker.plugins.visualizations.add({
     radius: {
       section: "Data",
       type: "number",
-      label: "Circle Radius"
+      label: "Circle Radius",
+      placeholder: "value the radius of the circle represents."
     },
     // keyword_search: {
     //   section: "Data",
