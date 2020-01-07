@@ -62,7 +62,7 @@ looker.plugins.visualizations.add({
       section: "Data",
       type: "number",
       label: "Range Override",
-      placeholder: "Value represented by the radius of the circle"
+      placeholder: "Value represented by radius of circle"
     },
     // keyword_search: {
     //   section: "Data",
