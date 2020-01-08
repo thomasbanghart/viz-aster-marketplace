@@ -22,7 +22,20 @@ looker.plugins.visualizations.add({
         {"Off":"off"}
         ],
       display: "radio",
-      default: "off"
+      default: "on"
+    },
+    center_value: {
+      section: "Data",
+      type: "string",
+      label: "Center Value",
+      values: [
+        {"Weighted Avg":"avg"},
+        {"Min":"min"},
+        {"Max":"max"},
+        {"None":"off"}
+        ],
+      display: "select",
+      default: "avg"
     },
     color_range: {
       section: "Format",
@@ -63,6 +76,18 @@ looker.plugins.visualizations.add({
       type: "number",
       label: "Range Override",
       placeholder: "Value represented by radius of circle"
+    },
+    threshold: {
+      section: "Format",
+      type: "number",
+      label: "Label Minimum Slice Size (radians)",
+      default: .2
+    },
+    label_size: {
+      section: "Format",
+      type: "number",
+      label: "Label Font Size (px)",
+      default: 10
     },
     // keyword_search: {
     //   section: "Data",
@@ -253,11 +278,13 @@ looker.plugins.visualizations.add({
             return a + b.weight;
           }, 0)
         );
+      var min = Math.round(Math.min(...all_scores));
+      var max = Math.round(Math.max(...all_scores));
     } else {
       // custom keyword option
       for (let i = 0; i < data.length; i++) {
         if (data[i].label.toLowerCase().includes(config.keyword_search.toLowerCase())) {
-          console.log(data[i].label + ' is used for centre score');
+          //console.log(data[i].label + ' is used for centre score');
           var score = data[i].weight,
             min = Math.min( ...all_weight),
             max = Math.max( ...all_weight),
@@ -311,13 +338,41 @@ looker.plugins.visualizations.add({
       .attr("fill",config.inner_circle_color);
 
     // affix score to centre of pie
-    svg.append("svg:text")
+    var centerVal = svg.append("svg:text")
       .attr("class", "aster-score")
       .attr("dy", ".35em")
       .attr("text-anchor", "middle") // text-align: right
       .style('fill', config.text_color)
       .attr("font-size", config.font_size)
-      .text(score);
+      .text( () => {
+        if (config.center_value == 'off') {
+          return;
+        } else if (config.center_value == 'avg') {
+          return score;
+        } else if (config.center_value == 'min') {
+          return min;
+        } else if (config.center_value == 'max') {
+          return max;
+        }
+      });
+
+    svg.append("text")
+      .attr("class", "score-sublabel")
+      .attr("dy", "2em")
+      .attr("text-anchor", "middle") // text-align: right
+      .style('fill', "#282828")
+      .attr("font-size", config.font_size*.4)
+      .text( () => {
+        if (config.center_value == 'off') {
+          return;
+        } else if (config.center_value == 'avg') {
+          return "AVG";
+        } else if (config.center_value == 'min') {
+          return "MIN";
+        } else if (config.center_value == 'max') {
+          return "MAX";
+        }
+      });
 
     var path = svg.selectAll(".solidArc")
       .data(pie(data))
@@ -398,7 +453,12 @@ looker.plugins.visualizations.add({
         .attr("startOffset","50%")
         .style("text-anchor","middle")
         .attr("xlink:href", function(d, i) { return "#sliceOutlineArc_"+i; })
-        .text(function(d) { return d.data.label; });
+        .attr("font-size", config.label_size)
+        .text(function(d) {
+          if (d.endAngle - d.startAngle > config.threshold) {
+            return d.data.label; 
+          }
+        });
 
       // Line 2
       svg.selectAll(".label-line-2")
@@ -415,8 +475,13 @@ looker.plugins.visualizations.add({
         .append("textPath")
         .attr("startOffset","50%")
         .style("text-anchor","middle")
+        .attr("font-size", config.label_size)
         .attr("xlink:href", function(d, i) { return "#sliceOutlineArc_"+i; })
-        .text(function(d) { return d.data.rendered; });
+        .text(function(d) {
+          if (d.endAngle - d.startAngle > config.threshold) {
+            return d.data.rendered; 
+          }
+        });
     }
 
     // legend
