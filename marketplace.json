@@ -2,8 +2,8 @@
   "label": "Aster Plot Visualization",
   "category_label": "Plug-ins",
   "branding": {
-    "image_uri": "",
-    "tagline": ""
+    "image_uri": "https://marketplace-api.looker.com/visualization-screenshots/aster_icon.png",
+    "tagline": "Use an Aster Plot to better contextualize your data with its weighted slices."
   },
     "constants": {
         "VIS_LABEL": {
