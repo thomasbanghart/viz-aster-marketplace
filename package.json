@@ -1,0 +1,13 @@
+{
+  "name": "looker-visualization",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "webpack --config webpack.config.js"
+  },
+  "dependencies": {
+    "uglifyjs-webpack-plugin": "^1.2.5",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.9"
+  }
+}
